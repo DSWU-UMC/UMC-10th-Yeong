@@ -1,0 +1,28 @@
+{
+  "name": "umc-workspace",
+  "version": "1.0.0",
+  "description": "",
+  "homepage": "https://github.com/DSWU-UMC/UMC-10th-Yeong#readme",
+  "bugs": {
+    "url": "https://github.com/DSWU-UMC/UMC-10th-Yeong/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DSWU-UMC/UMC-10th-Yeong.git"
+  },
+  "license": "ISC",
+  "author": "",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node src/index.js",
+    "dev": "nodemon --exec node src/index.js"
+  },
+  "dependencies": {
+    "express": "^5.2.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.14"
+  }
+}
