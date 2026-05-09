@@ -1,0 +1,11 @@
+$kind: http-request
+name: http://localhost:7777/api/v1/member-missions
+url: http://localhost:7777/api/v1/member-missions
+method: POST
+body:
+  type: json
+  content: |-
+    {
+        "missionId":1
+    }
+order: 2341519211012272

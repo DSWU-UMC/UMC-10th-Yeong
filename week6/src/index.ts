@@ -5,7 +5,7 @@ import { handleUserSignUp } from "./modules/users/controllers/user.controller.js
 import { addReview } from "./modules/review/controllers/review.controller.js";
 import { addMission, challengeMission } from "./modules/mission/controllers/mission.controller.js";
 import { handleListStoreReviews } from "./modules/stores/controllers/store.controller.js";
-console.log("week5 server running");
+console.log("week6 server running");
 
 // 1. 환경 변수 설정
 dotenv.config();

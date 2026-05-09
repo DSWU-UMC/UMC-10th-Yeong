@@ -1,0 +1,8 @@
+$kind: http-request
+name: http://localhost:7777/api/v1/stores/:storeId/reviews
+url: http://localhost:7777/api/v1/stores/:storeId/reviews
+method: GET
+pathVariables:
+  - key: storeId
+    value: "1"
+order: 3648887462797919

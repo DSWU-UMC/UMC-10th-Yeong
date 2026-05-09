@@ -1,14 +1,24 @@
 import { checkStoreExists, createMission, checkMissionExists, checkAlreadyChallenging, createUserMission } from "../repositories/mission.repository.js";
+import { bodyToMission } from "../dtos/mission.dto.js";
 
-export const addMissionService = async (storeId: number, body: any) => {
-  const { content, dueDate } = body;
+export const addMissionService = async (
+  storeId: number,
+  body: any
+) => {
+
+  const missionData = bodyToMission(body);
 
   const exists = await checkStoreExists(storeId);
+
   if (!exists) {
     throw new Error("존재하지 않는 가게입니다.");
   }
 
-  const missionId = await createMission(storeId, content, dueDate);
+  const missionId = await createMission(
+    storeId,
+    missionData.content,
+    missionData.dueDate
+  );
 
   return missionId;
 };
