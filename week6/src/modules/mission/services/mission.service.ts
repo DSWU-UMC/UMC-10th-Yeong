@@ -1,4 +1,13 @@
-import { checkStoreExists, createMission, checkMissionExists, checkAlreadyChallenging, createUserMission } from "../repositories/mission.repository.js";
+import { 
+  checkStoreExists, 
+  createMission, 
+  checkMissionExists, 
+  checkAlreadyChallenging, 
+  createUserMission,
+  findStoreMissions,
+  findMyMissions,
+  updateMissionState,
+} from "../repositories/mission.repository.js";
 import { bodyToMission } from "../dtos/mission.dto.js";
 
 export const addMissionService = async (
@@ -38,4 +47,24 @@ export const challengeMissionService = async (
   }
 
   return await createUserMission(memberId, missionId);
+};
+
+export const getStoreMissionsService = async (
+  storeId: number
+) => {
+  return await findStoreMissions(storeId);
+};
+
+
+export const getMyMissionsService = async (
+  userId: number
+) => {
+  return await findMyMissions(userId);
+};
+
+
+export const completeMissionService = async (
+  memberMissionId: number
+) => {
+  return await updateMissionState(memberMissionId);
 };

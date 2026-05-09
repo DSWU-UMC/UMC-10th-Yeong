@@ -1,5 +1,5 @@
 $kind: http-request
-name: http://localhost:7777/api/v1/member-missions
+name: 미션 도전하기
 url: http://localhost:7777/api/v1/member-missions
 method: POST
 body:

@@ -1,0 +1,5 @@
+$kind: http-request
+name: 내가 작성한 리뷰 목록
+url: http://localhost:7777/api/v1/reviews
+method: GET
+order: 3698758076478678

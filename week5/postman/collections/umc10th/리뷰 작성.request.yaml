@@ -1,5 +1,5 @@
 $kind: http-request
-name: localhost:7777/api/v1/stores/:storeId/reviews
+name: 리뷰 작성
 url: localhost:7777/api/v1/stores/:storeId/reviews
 method: POST
 pathVariables:

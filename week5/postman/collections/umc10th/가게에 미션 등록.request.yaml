@@ -1,5 +1,5 @@
 $kind: http-request
-name: http://localhost:7777/api/v1/stores/:storeId/missions
+name: 가게에 미션 등록
 url: http://localhost:7777/api/v1/stores/:storeId/missions
 method: POST
 pathVariables:

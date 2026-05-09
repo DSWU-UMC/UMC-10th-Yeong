@@ -1,5 +1,5 @@
 // review.service.ts
-import { checkStoreExists, createReview } from "./../repositories/review.repository.js";
+import { checkStoreExists, createReview, findMyReviews } from "./../repositories/review.repository.js";
 import { bodyToReview, CreateReviewRequest } from "../dtos/review.dto.js";
 
 
@@ -24,4 +24,10 @@ export const createReviewService = async (
   );
 
   return reviewId;
+};
+
+export const getMyReviewsService = async (
+  userId: number
+) => {
+  return await findMyReviews(userId);
 };

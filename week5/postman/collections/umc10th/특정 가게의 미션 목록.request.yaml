@@ -1,0 +1,8 @@
+$kind: http-request
+name: 특정 가게의 미션 목록
+url: http://localhost:7777/api/v1/stores/:storeId/missions
+method: GET
+pathVariables:
+  - key: storeId
+    value: "1"
+order: 3987494691571844

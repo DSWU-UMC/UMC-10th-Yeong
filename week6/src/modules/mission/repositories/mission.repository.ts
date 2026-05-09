@@ -70,3 +70,46 @@ export const createUserMission = async (
 
   return userMission.id;
 };
+
+
+export const findStoreMissions = async (
+  storeId: number
+) => {
+  return await prisma.mission.findMany({
+    where: {
+      storeId,
+    },
+    orderBy: {
+      id: "desc",
+    },
+  });
+};
+
+
+export const findMyMissions = async (
+  userId: number
+) => {
+  return await prisma.userMission.findMany({
+    where: {
+      userId,
+      state: "IN_PROGRESS",
+    },
+    include: {
+      mission: true,
+    },
+  });
+};
+
+
+export const updateMissionState = async (
+  memberMissionId: number
+) => {
+  return await prisma.userMission.update({
+    where: {
+      id: memberMissionId,
+    },
+    data: {
+      state: "COMPLETE",
+    },
+  });
+};

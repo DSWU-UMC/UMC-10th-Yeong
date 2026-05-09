@@ -1,5 +1,5 @@
 $kind: http-request
-name: http://localhost:7777/api/v1/stores/:storeId/reviews
+name: 가게별 리뷰 목록
 url: http://localhost:7777/api/v1/stores/:storeId/reviews
 method: GET
 pathVariables:

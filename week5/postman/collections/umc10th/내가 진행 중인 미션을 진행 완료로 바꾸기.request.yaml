@@ -1,0 +1,8 @@
+$kind: http-request
+name: 내가 진행 중인 미션을 진행 완료로 바꾸기
+url: http://localhost:7777/api/v1/member-missions/:memberMissionId
+method: PATCH
+pathVariables:
+  - key: memberMissionId
+    value: "1"
+order: 4449410924133600

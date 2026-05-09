@@ -2,8 +2,8 @@ import dotenv from "dotenv";
 import express, { Express, Request, Response } from "express";
 import cors from "cors";
 import { handleUserSignUp } from "./modules/users/controllers/user.controller.js";
-import { addReview } from "./modules/review/controllers/review.controller.js";
-import { addMission, challengeMission } from "./modules/mission/controllers/mission.controller.js";
+import { addReview, getMyReviews } from "./modules/review/controllers/review.controller.js";
+import { addMission, challengeMission, getStoreMissions, getMyMissions, completeMission } from "./modules/mission/controllers/mission.controller.js";
 import { handleListStoreReviews } from "./modules/stores/controllers/store.controller.js";
 console.log("week6 server running");
 
@@ -32,6 +32,17 @@ app.post("/api/v1/stores/:storeId/missions", addMission);
 app.post("/api/v1/member-missions", challengeMission);
 
 app.get("/api/v1/stores/:storeId/reviews", handleListStoreReviews);
+
+//내가 작성한 리뷰 목록
+app.get("/api/v1/reviews", getMyReviews);
+//특정 가게의 미션 목록
+app.get("/api/v1/stores/:storeId/missions", getStoreMissions);
+//내가 진행 중인 미션 목록
+app.get("/api/v1/missions", getMyMissions);
+
+//내가 진행 중인 미션을 진행 완료로 바꾸기
+app.patch("/api/v1/member-missions/:memberMissionId", completeMission);
+
 
 // 4. 서버 시작
 app.listen(port, () => {

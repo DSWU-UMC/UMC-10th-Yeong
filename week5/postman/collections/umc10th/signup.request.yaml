@@ -1,5 +1,5 @@
 $kind: http-request
-name: http://localhost:7777/api/v1/users/signup
+name: signup
 url: http://localhost:7777/api/v1/users/signup
 method: POST
 headers:

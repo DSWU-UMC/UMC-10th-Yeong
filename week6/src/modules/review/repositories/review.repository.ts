@@ -32,3 +32,16 @@ export const createReview = async (
   return review.id;
 };
 
+
+export const findMyReviews = async (
+  userId: number
+) => {
+  return await prisma.review.findMany({
+    where: {
+      userId,
+    },
+    orderBy: {
+      id: "desc",
+    },
+  });
+};
