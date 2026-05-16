@@ -8,7 +8,23 @@ import {
   findMyMissions,
   updateMissionState,
 } from "../repositories/mission.repository.js";
-import { bodyToMission } from "../dtos/mission.dto.js";
+import { CreateMissionRequest } from "../dtos/mission.dto.js";
+
+const bodyToMission = (body: CreateMissionRequest) => {
+  if (!body.content) {
+    throw new Error("content is required");
+  }
+
+  const dueDate = new Date(body.dueDate);
+  if (isNaN(dueDate.getTime())) {
+    throw new Error("Invalid dueDate");
+  }
+
+  return {
+    content: body.content.trim(),
+    dueDate,
+  };
+};
 
 export const addMissionService = async (
   storeId: number,

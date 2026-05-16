@@ -4,8 +4,8 @@ export interface UserSignUpRequest {
   email: string;
   name: string;
   gender: string;
-  birth: Date;
-  address?: string; // ?가 붙으면 '없을 수도 있음(선택)'이라는 뜻이에요!
+  birth: string; // ISO 8601 날짜 문자열 (예: "2000-01-01")
+  address?: string;
   detailAddress?: string;
   phoneNumber: string;
   preferences: number[];

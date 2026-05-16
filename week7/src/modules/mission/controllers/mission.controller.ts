@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { Body, Controller, Post, Get, Patch, Route, Tags, Path } from "tsoa";
 import { addMissionService, 
         challengeMissionService,
         getStoreMissionsService,
@@ -8,81 +8,90 @@ import { addMissionService,
 
 const userId = 1;
 
-export const addMission = async (req: Request, res: Response) => {
-  try {
-    const storeId = Number(req.params.storeId);
-
-    const missionId = await addMissionService(storeId, req.body);
-
-    return res.status(201).json({
-      missionId,
-    });
-  } catch (err: any) {
-    return res.status(400).json({
-      message: err.message,
-    });
+@Route("stores/{storeId}/missions")
+@Tags("Missions")
+export class MissionController extends Controller {
+  @Post()
+  public async addMission(
+    @Path() storeId: number,
+    @Body() body: any,
+  ): Promise<{ missionId: number }> {
+    try {
+      const missionId = await addMissionService(storeId, body);
+      this.setStatus(201);
+      return {
+        missionId,
+      };
+    } catch (err: any) {
+      this.setStatus(400);
+      throw err;
+    }
   }
-};
 
-export const challengeMission = async (req: Request, res: Response) => {
-  try {
-    //const memberId = req.user.id;
-    const memberId = userId;
-    const { missionId } = req.body;
-
-    const userMissionId = await challengeMissionService(memberId, missionId);
-
-    return res.status(201).json({
-      userMissionId,
-      state: "IN_PROGRESS",
-    });
-  } catch (err: any) {
-    return res.status(400).json({
-      message: err.message,
-    });
+  @Get()
+  public async getStoreMissions(
+    @Path() storeId: number,
+  ): Promise<{ data: any[] }> {
+    try {
+      const missions = await getStoreMissionsService(storeId);
+      return {
+        data: missions,
+      };
+    } catch (err: any) {
+      this.setStatus(400);
+      throw err;
+    }
   }
-};
+}
 
-export const getStoreMissions = async (req: Request, res: Response) => {
-  try {
-    const storeId = Number(req.params.storeId);
-
-    const missions = await getStoreMissionsService(storeId);
-
-    return res.status(200).json({
-      data: missions,
-    });
-  } catch (err: any) {
-    return res.status(400).json({
-      message: err.message,
-    });
+@Route("member-missions")
+@Tags("Missions")
+export class UserMissionController extends Controller {
+  @Post()
+  public async challengeMission(
+    @Body() body: { missionId: number },
+  ): Promise<{ userMissionId: number; state: string }> {
+    try {
+      const memberId = userId;
+      const userMissionId = await challengeMissionService(memberId, body.missionId);
+      this.setStatus(201);
+      return {
+        userMissionId,
+        state: "IN_PROGRESS",
+      };
+    } catch (err: any) {
+      this.setStatus(400);
+      throw err;
+    }
   }
-};
 
-export const getMyMissions = async (req: Request, res: Response) => {
-  try {
-    const missions = await getMyMissionsService(userId);
-
-    return res.status(200).json({
-      data: missions,
-    });
-  } catch (err: any) {
-    return res.status(400).json({
-      message: err.message,
-    });
+  @Patch("{memberMissionId}")
+  public async completeMission(
+    @Path() memberMissionId: number,
+  ): Promise<any> {
+    try {
+      const result = await completeMissionService(memberMissionId);
+      return result;
+    } catch (err: any) {
+      this.setStatus(400);
+      throw err;
+    }
   }
-};
+}
 
-export const completeMission = async (req: Request, res: Response) => {
-  try {
-    const memberMissionId = Number(req.params.memberMissionId);
-
-    const result = await completeMissionService(memberMissionId);
-
-    return res.status(200).json(result);
-  } catch (err: any) {
-    return res.status(400).json({
-      message: err.message,
-    });
+@Route("missions")
+@Tags("Missions")
+export class MyMissionController extends Controller {
+  @Get()
+  public async getMyMissions(): Promise<{ data: any[] }> {
+    try {
+      const missions = await getMyMissionsService(userId);
+      return {
+        data: missions,
+      };
+    } catch (err: any) {
+      this.setStatus(400);
+      throw err;
+    }
   }
-};
+}

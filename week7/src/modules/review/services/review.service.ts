@@ -1,7 +1,22 @@
 // review.service.ts
 import { checkStoreExists, createReview, findMyReviews } from "./../repositories/review.repository.js";
-import { bodyToReview, CreateReviewRequest } from "../dtos/review.dto.js";
+import { CreateReviewRequest } from "../dtos/review.dto.js";
 
+const bodyToReview = (body: CreateReviewRequest) => {
+  if (!body.title || !body.content) {
+    throw new Error("title and content are required");
+  }
+
+  if (body.score < 1 || body.score > 5) {
+    throw new Error("score must be between 1 and 5");
+  }
+
+  return {
+    title: body.title.trim(),
+    content: body.content.trim(),
+    score: body.score,
+  };
+};
 
 export const createReviewService = async (
   memberId: number,

@@ -1,23 +1,17 @@
-import { Request, Response, NextFunction } from "express";
+import { Controller, Get, Route, Tags, Path, Query } from "tsoa";
 import { StatusCodes } from "http-status-codes";
 import { listStoreReviews } from "../services/store.service.js";
 
-export const handleListStoreReviews = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-): Promise<void> => {
-  try {
-    const storeId = parseInt(req.params.storeId as string, 10);
-    const cursor =
-    typeof req.query.cursor === "string"
-      ? parseInt(req.query.cursor, 10)
-      : 0;
-
+@Route("stores/{storeId}/reviews")
+@Tags("Stores")
+export class StoreController extends Controller {
+  @Get()
+  public async handleListStoreReviews(
+    @Path() storeId: number,
+    @Query() cursor: number = 0
+  ): Promise<any> {
+    this.setStatus(StatusCodes.OK);
     const reviews = await listStoreReviews(storeId, cursor);
-
-    res.status(StatusCodes.OK).json(reviews);
-  } catch (err) {
-    next(err);
+    return reviews;
   }
-};
+}
