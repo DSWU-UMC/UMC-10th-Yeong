@@ -1,14 +1,15 @@
 // review.service.ts
 import { checkStoreExists, createReview, findMyReviews } from "./../repositories/review.repository.js";
 import { CreateReviewRequest } from "../dtos/review.dto.js";
+import { ValidationError, NotFoundError } from "../../../common/errors/error.js";
 
 const bodyToReview = (body: CreateReviewRequest) => {
   if (!body.title || !body.content) {
-    throw new Error("title and content are required");
+    throw new ValidationError("title과 content를 작성해주세요.");
   }
 
   if (body.score < 1 || body.score > 5) {
-    throw new Error("score must be between 1 and 5");
+    throw new ValidationError("score는 1에서 5 사이여야 합니다.");
   }
 
   return {
@@ -25,7 +26,7 @@ export const createReviewService = async (
 ) => {
   const exists = await checkStoreExists(storeId);
   if (!exists) {
-    throw new Error("존재하지 않는 가게입니다.");
+    throw new NotFoundError("존재하지 않는 가게입니다.");
   }
 
   const review = bodyToReview(body);

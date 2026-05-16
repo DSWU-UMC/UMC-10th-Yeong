@@ -5,6 +5,7 @@ import { addMissionService,
         getMyMissionsService,
         completeMissionService
        } from "./../services/mission.service.js";
+import { ApiResponse, success } from "../../../common/responses/response.js";
 
 const userId = 1;
 
@@ -15,13 +16,13 @@ export class MissionController extends Controller {
   public async addMission(
     @Path() storeId: number,
     @Body() body: any,
-  ): Promise<{ missionId: number }> {
+  ): Promise<ApiResponse<{ missionId: number }>> {
     try {
       const missionId = await addMissionService(storeId, body);
       this.setStatus(201);
-      return {
+      return success({
         missionId,
-      };
+      });
     } catch (err: any) {
       this.setStatus(400);
       throw err;
@@ -31,12 +32,10 @@ export class MissionController extends Controller {
   @Get()
   public async getStoreMissions(
     @Path() storeId: number,
-  ): Promise<{ data: any[] }> {
+  ): Promise<ApiResponse<any[]>> {
     try {
       const missions = await getStoreMissionsService(storeId);
-      return {
-        data: missions,
-      };
+      return success(missions);
     } catch (err: any) {
       this.setStatus(400);
       throw err;
@@ -50,15 +49,15 @@ export class UserMissionController extends Controller {
   @Post()
   public async challengeMission(
     @Body() body: { missionId: number },
-  ): Promise<{ userMissionId: number; state: string }> {
+  ): Promise<ApiResponse<{ userMissionId: number; state: string }>> {
     try {
       const memberId = userId;
       const userMissionId = await challengeMissionService(memberId, body.missionId);
       this.setStatus(201);
-      return {
+      return success({
         userMissionId,
         state: "IN_PROGRESS",
-      };
+      });
     } catch (err: any) {
       this.setStatus(400);
       throw err;
@@ -68,10 +67,10 @@ export class UserMissionController extends Controller {
   @Patch("{memberMissionId}")
   public async completeMission(
     @Path() memberMissionId: number,
-  ): Promise<any> {
+  ): Promise<ApiResponse<any>> {
     try {
       const result = await completeMissionService(memberMissionId);
-      return result;
+      return success(result);
     } catch (err: any) {
       this.setStatus(400);
       throw err;
@@ -83,12 +82,10 @@ export class UserMissionController extends Controller {
 @Tags("Missions")
 export class MyMissionController extends Controller {
   @Get()
-  public async getMyMissions(): Promise<{ data: any[] }> {
+  public async getMyMissions(): Promise<ApiResponse<any[]>> {
     try {
       const missions = await getMyMissionsService(userId);
-      return {
-        data: missions,
-      };
+      return success(missions);
     } catch (err: any) {
       this.setStatus(400);
       throw err;

@@ -22,6 +22,8 @@
   "scripts": {
     "start": "tsoa spec-and-routes && tsx src/index.ts",
     "dev": "tsoa spec-and-routes && npx prisma generate &&nodemon --exec tsx src/index.ts",
+    "postroutes": "node ./scripts/patch-generated-routes.js",
+    "routes": "tsoa spec-and-routes && npm run postroutes",
     "start1": "npx prisma generate && tsc && node dist/index.js",
     "dev1": "nodemon --ext ts,prisma --exec \"npx prisma generate && tsx src/index.ts\"",
     "dev2": "npx tsx watch src/index.ts"

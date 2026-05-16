@@ -1,5 +1,6 @@
 import { Body, Controller, Post, Get, Route, Tags, Path } from "tsoa";
 import { createReviewService, getMyReviewsService } from "./../services/review.service.js";
+import { ApiResponse, success } from "../../../common/responses/response.js";
 
 const userIdForTest = 1;
 
@@ -10,14 +11,14 @@ export class ReviewController extends Controller {
   public async addReview(
     @Path() storeId: number,
     @Body() body: any,
-  ): Promise<{ reviewId: number; createdAt: Date }> {
+  ): Promise<ApiResponse<{ reviewId: number; createdAt: Date }>> {
     try {
       const userId = userIdForTest;
       const reviewId = await createReviewService(userId, storeId, body);
-      return {
+      return success({
         reviewId,
         createdAt: new Date(),
-      };
+      });
     } catch (err: any) {
       this.setStatus(400);
       throw err;
@@ -29,13 +30,11 @@ export class ReviewController extends Controller {
 @Tags("Reviews")
 export class MyReviewController extends Controller {
   @Get()
-  public async getMyReviews(): Promise<{ data: any[] }> {
+  public async getMyReviews(): Promise<ApiResponse<any[]>> {
     try {
       const userId = userIdForTest;
       const reviews = await getMyReviewsService(userId);
-      return {
-        data: reviews,
-      };
+      return success(reviews);
     } catch (err: any) {
       this.setStatus(400);
       throw err;

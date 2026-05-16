@@ -22,6 +22,6 @@
     "forceConsistentCasingInFileNames": true, 
     "sourceMap": true             
   },
-  "include": ["src/**/*"],        
+  "include": ["src/**/*", "src/**/*.d.ts"],        
   "exclude": ["node_modules", "dist"] // 빌드 결과물(dist)도 검사에서 제외하는 게 좋아요!
 }

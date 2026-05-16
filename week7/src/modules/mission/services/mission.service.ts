@@ -9,15 +9,16 @@ import {
   updateMissionState,
 } from "../repositories/mission.repository.js";
 import { CreateMissionRequest } from "../dtos/mission.dto.js";
+import { ValidationError, NotFoundError, ConflictError } from "../../../common/errors/error.js";
 
 const bodyToMission = (body: CreateMissionRequest) => {
   if (!body.content) {
-    throw new Error("content is required");
+    throw new ValidationError("내용을 작성해주세요.");
   }
 
   const dueDate = new Date(body.dueDate);
   if (isNaN(dueDate.getTime())) {
-    throw new Error("Invalid dueDate");
+    throw new ValidationError("유효하지 않은 dueDate입니다.");
   }
 
   return {
@@ -36,7 +37,7 @@ export const addMissionService = async (
   const exists = await checkStoreExists(storeId);
 
   if (!exists) {
-    throw new Error("존재하지 않는 가게입니다.");
+    throw new NotFoundError("존재하지 않는 가게입니다.");
   }
 
   const missionId = await createMission(
@@ -54,12 +55,12 @@ export const challengeMissionService = async (
 ) => {
   const exists = await checkMissionExists(missionId);
   if (!exists) {
-    throw new Error("존재하지 않는 미션입니다.");
+    throw new NotFoundError("존재하지 않는 미션입니다.");
   }
 
   const already = await checkAlreadyChallenging(memberId, missionId);
   if (already) {
-    throw new Error("이미 도전 중인 미션입니다.");
+    throw new ConflictError("이미 도전 중인 미션입니다.");
   }
 
   return await createUserMission(memberId, missionId);
