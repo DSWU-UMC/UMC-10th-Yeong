@@ -10,14 +10,13 @@ body:
   type: json
   content: |-
     {
-      "email": "test3@example.com",
-      "password": "1234",
+      "email": "test5@example.com",
       "name": "홍길동",
       "gender": "MALE",
       "birth": "2000-01-01",
       "address": "서울시 강남구",
       "detailAddress": "101호",
       "phoneNumber": "01012345678",
-      "preferences":[1,2]
+      "preferences":[1,2,3]
     }
 order: 1778292857805

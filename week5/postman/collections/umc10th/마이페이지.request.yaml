@@ -1,4 +1,9 @@
 $kind: http-request
-url: ""
+name: 마이페이지
+url: http://localhost:7777/mypage
 method: GET
+auth:
+  type: bearer
+  credentials:
+    token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NywiZW1haWwiOiIyMDIzMDc2NkBkdWtzdW5nLmFjLmtyIiwiaWF0IjoxNzgwMDY2ODQ2LCJleHAiOjE3ODAwNzA0NDZ9.kU50NjAfZ83lsiHCxZKaANbRbra_RD9pV3Or6u8O8wk
 order: 4496152456782453

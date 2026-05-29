@@ -4,19 +4,19 @@
 import type { TsoaRoute } from '@tsoa/runtime';
 import {  fetchMiddlewares, ExpressTemplateService } from '@tsoa/runtime';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-import { UserController } from './../modules/users/controllers/user.controller.js';
+import { UserController } from './../modules/users/controllers/user.controller';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-import { StoreController } from './../modules/stores/controllers/store.controller.js';
+import { StoreController } from './../modules/stores/controllers/store.controller';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-import { ReviewController } from './../modules/review/controllers/review.controller.js';
+import { ReviewController } from './../modules/review/controllers/review.controller';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-import { MyReviewController } from './../modules/review/controllers/review.controller.js';
+import { MyReviewController } from './../modules/review/controllers/review.controller';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-import { MissionController } from './../modules/mission/controllers/mission.controller.js';
+import { MissionController } from './../modules/mission/controllers/mission.controller';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-import { UserMissionController } from './../modules/mission/controllers/mission.controller.js';
+import { UserMissionController } from './../modules/mission/controllers/mission.controller';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-import { MyMissionController } from './../modules/mission/controllers/mission.controller.js';
+import { MyMissionController } from './../modules/mission/controllers/mission.controller';
 import type { Request as ExRequest, Response as ExResponse, RequestHandler, Router } from 'express';
 
 
