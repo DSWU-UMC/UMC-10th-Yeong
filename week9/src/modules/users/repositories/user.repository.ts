@@ -1,17 +1,25 @@
 import { prisma } from "../../../db.config.js";
 
-// 1. User 데이터 삽입
-// User 데이터 삽입
+// 1. User 데이터 생성 또는 업데이트
 export const addUser = async (data: any) => {
-  // 1. 이미 존재하는 이메일인지 확인
-  const user = await prisma.user.findFirst({ where: { email: data.email } });
-  
-  if (user) {
-    return null;
+  const existingUser = await prisma.user.findUnique({ where: { email: data.email } });
+
+  if (existingUser) {
+    const updated = await prisma.user.update({
+      where: { id: existingUser.id },
+      data: {
+        name: data.name,
+        gender: data.gender,
+        birth: data.birth,
+        address: data.address,
+        detailAddress: data.detailAddress,
+        phoneNumber: data.phoneNumber,
+      },
+    });
+    return updated.id;
   }
 
-  // 2. 새로운 유저 생성
-  const created = await prisma.user.create({ 
+  const created = await prisma.user.create({
     data: {
       email: data.email,
       name: data.name,
@@ -20,12 +28,15 @@ export const addUser = async (data: any) => {
       address: data.address,
       detailAddress: data.detailAddress,
       phoneNumber: data.phoneNumber,
-    } 
+    },
   });
 
   return created.id;
 };
 
+export const clearUserPreferences = async (userId: number) => {
+  await prisma.userFavorCategory.deleteMany({ where: { userId } });
+};
 
 export const getUser = async (userId: number) => {
   return await prisma.user.findFirstOrThrow({ where: { id: userId } });

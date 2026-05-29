@@ -90,15 +90,16 @@ export class UserController extends Controller {
     /**
      * 마이페이지
      * @summary 로그인한 사용자를 위한 마이페이지
-     * @param req - 요청(쿠키에서 사용자 이름을 읽음)
+     * @param req - 요청(인증된 사용자 정보 포함)
      * @returns 사용자 전용 HTML 문자열
      */
     @Response(200, "조회 성공")
     @Response(401, "인증 실패 - 로그인 필요")
     public async handleMypage(@Request() req: ExpressRequest): Promise<ApiResponse<String>> {
+      const userName = (req.user as any)?.name ?? "사용자";
       return success(`
               <h1>마이페이지</h1>
-              <p>환영합니다, ${req.cookies.username}님!</p>
+              <p>환영합니다, ${userName}님!</p>
               <p>이 페이지는 로그인한 사람만 볼 수 있습니다.</p>
           `);
     }

@@ -9,11 +9,18 @@ import swaggerUi from "swagger-ui-express";
 // ESM 환경에서는 JSON 파일을 가져올 때 아래와 같이 처리합니다.
 import path from "path";
 import fs from "fs";
+import passport from "passport";
+import { googleStrategy,jwtStrategy } from "./auth.config.js";
+
 
 // 1. 환경 변수 설정
 dotenv.config();
 
+passport.use(googleStrategy);
+passport.use(jwtStrategy);
+
 const app: Express = express();
+app.use(passport.initialize());
 const port = process.env.PORT || 3000;
 
 app.use((req: Request, res: Response, next: NextFunction) => {
@@ -100,20 +107,20 @@ app.use((err: any, req: Request, res: Response, next: NextFunction) => {
 });
 
 
-const isLogin = (req: any, res: any, next: any) => {
-    // cookie-parser가 만들어준 req.cookies 객체에서 username을 확인
-    const { username } = req.cookies; 
+// const isLogin = (req: any, res: any, next: any) => {
+//     // cookie-parser가 만들어준 req.cookies 객체에서 username을 확인
+//     const { username } = req.cookies; 
 
-    if (username) {
+//     if (username) {
      
-        console.log(`[인증 성공] ${username}님, 환영합니다.`);
-        next(); 
-    } else {
+//         console.log(`[인증 성공] ${username}님, 환영합니다.`);
+//         next(); 
+//     } else {
     
-        console.log('[인증 실패] 로그인이 필요합니다.');
-        res.status(401).send('<script>alert("로그인이 필요합니다!");location.href="/login";</script>');
-    }
-};
+//         console.log('[인증 실패] 로그인이 필요합니다.');
+//         res.status(401).send('<script>alert("로그인이 필요합니다!");location.href="/login";</script>');
+//     }
+// };
 
 
 // 3. 기본 라우트
@@ -142,14 +149,37 @@ app.get('/getcookie', (req, res) => {
     }
 });
 
+const isLogin = passport.authenticate('jwt', { session: false });
 
 app.get('/mypage', isLogin, (req, res) => {
-    res.send(`
-        <h1>마이페이지</h1>
-        <p>환영합니다, ${req.cookies.username}님!</p>
-        <p>이 페이지는 로그인한 사람만 볼 수 있습니다.</p>
-    `);
+  const user = req.user as { name?: string } | undefined;
+
+  if (!user) {
+    return res.status(401).error({
+      errorCode: "unauthorized",
+      message: "인증된 사용자가 없습니다.",
+      data: null,
+    });
+  }
+
+  return res.status(200).success({
+    data: {
+      user,
+    },
+    message: `인증 성공! ${user.name}님의 마이페이지입니다.`,
+  });
 });
+
+//http://localhost:7777/oauth2/login/google
+
+app.get("/oauth2/login/google", passport.authenticate("google", { session: false }));
+app.get("/oauth2/callback/google", 
+  passport.authenticate("google", { session: false, failureRedirect: "/login-failed" }),
+  (req, res) => {
+    res.status(200).json({ success: true, tokens: req.user });
+  }
+);
+
 
 // 4. 서버 시작
 app.listen(port, () => {

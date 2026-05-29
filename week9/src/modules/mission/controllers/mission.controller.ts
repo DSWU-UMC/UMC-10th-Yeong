@@ -1,14 +1,14 @@
-import { Body, Controller, Post, Get, Patch, Route, Tags, Path, Response, Example } from "tsoa";
+import { Body, Controller, Post, Get, Patch, Route, Tags, Path, Response, Example, Request, Middlewares } from "tsoa";
 import { addMissionService, 
         challengeMissionService,
         getStoreMissionsService,
         getMyMissionsService,
         completeMissionService
-       } from "./../services/mission.service.js";
+       } from "../services/mission.service.js";
 import { ApiResponse, success } from "../../../common/responses/response.js";
 import { CreateMissionRequest, MissionResponse, ChallengeMissionRequest, ChallengeMissionResponse } from "../dtos/mission.dto.js";
-
-const userId = 1;
+import { authorizeUser } from "../../../common/middlewares/auth.middleware.js";
+import { Request as ExpressRequest } from "express";
 
 @Route("stores/{storeId}/missions")
 @Tags("Missions")
@@ -83,11 +83,17 @@ export class UserMissionController extends Controller {
   @Response(201, "도전 성공")
   @Example<ChallengeMissionRequest>({ missionId: 5 })
   @Example<ChallengeMissionResponse>({ userMissionId: 100, state: "IN_PROGRESS" })
+  @Middlewares(authorizeUser())
   public async challengeMission(
+    @Request() req: ExpressRequest,
     @Body() body: ChallengeMissionRequest,
   ): Promise<ApiResponse<ChallengeMissionResponse>> {
     try {
-      const memberId = userId;
+      const memberId = (req.user as any)?.id;
+      if (!memberId) {
+        this.setStatus(401);
+        throw new Error("로그인이 필요합니다.");
+      }
       const userMissionId = await challengeMissionService(memberId, body.missionId);
       this.setStatus(201);
       return success({
@@ -134,9 +140,17 @@ export class MyMissionController extends Controller {
    */
   @Response(400, "미션 조회 실패 - 잘못된 요청")
   @Response(200, "조회 성공")
-  public async getMyMissions(): Promise<ApiResponse<any[]>> {
+  @Middlewares(authorizeUser())
+  public async getMyMissions(
+    @Request() req: ExpressRequest,
+  ): Promise<ApiResponse<any[]>> {
     try {
-      const missions = await getMyMissionsService(userId);
+      const memberId = (req.user as any)?.id;
+      if (!memberId) {
+        this.setStatus(401);
+        throw new Error("로그인이 필요합니다.");
+      }
+      const missions = await getMyMissionsService(memberId);
       return success(missions);
     } catch (err: any) {
       this.setStatus(400);

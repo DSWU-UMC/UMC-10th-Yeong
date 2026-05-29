@@ -1,5 +1,5 @@
 // review.service.ts
-import { checkStoreExists, createReview, findMyReviews } from "./../repositories/review.repository.js";
+import { checkStoreExists, createReview, findMyReviews } from "../repositories/review.repository.js";
 import { CreateReviewRequest } from "../dtos/review.dto.js";
 import { ValidationError, NotFoundError } from "../../../common/errors/error.js";
 

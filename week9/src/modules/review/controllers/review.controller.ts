@@ -1,9 +1,10 @@
-import { Body, Controller, Post, Get, Route, Tags, Path, Response, Example } from "tsoa";
-import { createReviewService, getMyReviewsService } from "./../services/review.service.js";
+import { Body, Controller, Post, Get, Route, Tags, Path, Response, Example, Request, Middlewares } from "tsoa";
+import { createReviewService, getMyReviewsService } from "../services/review.service.js";
 import { ApiResponse, success } from "../../../common/responses/response.js";
 import { CreateReviewRequest, ReviewResponse } from "../dtos/review.dto.js";
+import { authorizeUser } from "../../../common/middlewares/auth.middleware.js";
+import { Request as ExpressRequest } from "express";
 
-const userIdForTest = 1;
 
 @Route("stores/{storeId}/reviews")
 @Tags("Reviews")
@@ -26,14 +27,21 @@ export class ReviewController extends Controller {
   })
   @Example<ReviewResponse>({
     reviewId: 123,
-    createdAt: new Date().toISOString()
+    createdAt: new Date()
   })
+  @Middlewares(authorizeUser())
   public async addReview(
     @Path() storeId: number,
     @Body() body: CreateReviewRequest,
+    @Request() req: ExpressRequest,
   ): Promise<ApiResponse<ReviewResponse>> {
     try {
-      const userId = userIdForTest;
+      const userId = (req.user as any)?.id;
+      if (!userId) {
+        this.setStatus(401);
+        throw new Error("로그인이 필요합니다.");
+      }
+
       const reviewId = await createReviewService(userId, storeId, body);
       return success({
         reviewId,
@@ -59,11 +67,18 @@ export class MyReviewController extends Controller {
   @Response(401, "인증 실패 - 로그인 필요")
   @Response(200, "조회 성공")
   @Example<ReviewResponse[]>([
-    { reviewId: 1, createdAt: new Date().toISOString() }
+    { reviewId: 1, createdAt: new Date() }
   ])
-  public async getMyReviews(): Promise<ApiResponse<any[]>> {
+  @Middlewares(authorizeUser())
+  public async getMyReviews(
+    @Request() req: ExpressRequest,
+  ): Promise<ApiResponse<any[]>> {
     try {
-      const userId = userIdForTest;
+      const userId = (req.user as any)?.id;
+      if (!userId) {
+        this.setStatus(401);
+        throw new Error("로그인이 필요합니다.");
+      }
       const reviews = await getMyReviewsService(userId);
       return success(reviews);
     } catch (err: any) {
