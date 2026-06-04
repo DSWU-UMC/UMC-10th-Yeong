@@ -1,0 +1,20 @@
+$kind: http-request
+name: 리뷰 작성
+url: localhost:7777/api/v1/stores/:storeId/reviews
+method: POST
+pathVariables:
+  - key: storeId
+    value: "1"
+body:
+  type: json
+  content: |
+    {
+      "title": "맛있어요",
+      "content": "ㄴㄴㄴ",
+      "score": 5
+    }
+auth:
+  type: bearer
+  credentials:
+    token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NywiZW1haWwiOiIyMDIzMDc2NkBkdWtzdW5nLmFjLmtyIiwiaWF0IjoxNzgwMDY2ODQ2LCJleHAiOjE3ODAwNzA0NDZ9.kU50NjAfZ83lsiHCxZKaANbRbra_RD9pV3Or6u8O8wk
+order: 1399665043594102

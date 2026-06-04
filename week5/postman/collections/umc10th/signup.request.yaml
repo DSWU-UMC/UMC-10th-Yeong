@@ -1,0 +1,22 @@
+$kind: http-request
+name: signup
+url: http://localhost:7777/api/v1/users/signup
+method: POST
+headers:
+  - key: Content-Type
+    value: application/json
+    disabled: true
+body:
+  type: json
+  content: |-
+    {
+      "email": "test5@example.com",
+      "name": "홍길동",
+      "gender": "MALE",
+      "birth": "2000-01-01",
+      "address": "서울시 강남구",
+      "detailAddress": "101호",
+      "phoneNumber": "01012345678",
+      "preferences":[1,2,3]
+    }
+order: 1778292857805

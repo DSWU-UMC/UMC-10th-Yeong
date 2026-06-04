@@ -1,0 +1,15 @@
+$kind: http-request
+name: 가게에 미션 등록
+url: http://localhost:7777/api/v1/stores/:storeId/missions
+method: POST
+pathVariables:
+  - key: storeId
+    value: "8"
+body:
+  type: json
+  content: |-
+    {
+     "content" : "ㅁㅁㅁ",
+     "dueDate" : "2026-05-10"
+    }
+order: 2312026574041790
