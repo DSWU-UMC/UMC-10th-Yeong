@@ -94,9 +94,7 @@ jobs:
               '
       - name: Create environment variables
         run: |
-          ssh target "cat > /opt/app/umc10th/current/.env <<'EOF'
-          ${{ secrets.EC2_DOT_ENV }}
-          EOF"
+          ssh target "printf '%s' '${{ secrets.EC2_DOT_ENV }}' > /opt/app/umc10th/current/.env"
         env:
           EC2_DOT_ENV: ${{ secrets.EC2_DOT_ENV }}
       - name: Config systemd service file
@@ -111,7 +109,7 @@ jobs:
           [Service]
           User=ubuntu
           WorkingDirectory=/opt/app/umc10th/current
-          ExecStart=/bin/bash -lc 'source /home/ubuntu/.nvm/nvm.sh && npm run start'
+          ExecStart=/home/ubuntu/.nvm/versions/node/v24.16.0/bin/node /opt/app/umc10th/current/dist/index.js
           Restart=always
           Environment=NODE_ENV=production
 
